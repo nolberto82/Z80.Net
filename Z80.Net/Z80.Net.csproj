@@ -176,47 +176,73 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="roms\82s123.7f">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="roms\82s126.1m">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="roms\82s126.3m">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="roms\82s126.4a">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="roms\mspac\5e" />
-    <None Include="roms\mspac\5f" />
-    <None Include="roms\mspac\82s123.7f" />
-    <None Include="roms\mspac\82s126.1m" />
-    <None Include="roms\mspac\82s126.3m" />
-    <None Include="roms\mspac\82s126.4a" />
-    <None Include="roms\mspac\pacman.6e" />
-    <None Include="roms\mspac\pacman.6f" />
-    <None Include="roms\mspac\pacman.6h" />
-    <None Include="roms\mspac\pacman.6j" />
-    <None Include="roms\mspac\u5" />
-    <None Include="roms\mspac\u6" />
-    <None Include="roms\mspac\u7" />
+    <None Include="roms\mspac\5e">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\5f">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\82s123.7f">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\82s126.1m">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\82s126.3m">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\82s126.4a">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\pacman.6e">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\pacman.6f">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\pacman.6h">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\pacman.6j">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\u5">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\u6">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="roms\mspac\u7">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="roms\pacman.5e">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="roms\pacman.5f">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="roms\pacman.6e">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="roms\pacman.6f">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="roms\pacman.6h">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="roms\pacman.6j">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -235,7 +261,7 @@
   <Import Project="..\packages\MonoGame.Forms.DX.3.0.0\build\MonoGame.Forms.DX.targets" Condition="Exists('..\packages\MonoGame.Forms.DX.3.0.0\build\MonoGame.Forms.DX.targets')" />
   <PropertyGroup>
     <PostBuildEvent>; Move all assemblies and related files to lib folder
-ROBOCOPY "$(TargetDir) " "$(TargetDir)\libs " /XF *.exe *.config *.manifest /XD libs logs roms content /E /IS /MOVE
+ROBOCOPY "$(TargetDir) " "$(TargetDir)\libs " /XF *.exe *.config *.manifest  /XD libs logs content roms /E /IS /MOVE
 if %25errorlevel%25 leq 4 exit 0 else exit %25errorlevel%25</PostBuildEvent>
   </PropertyGroup>
 </Project>

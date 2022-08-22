@@ -178,8 +178,7 @@ namespace Z80.Net
 
             while (audio.PendingBufferCount < 15)
             {
-                audio.SubmitBuffer(z80.wsg.samples);
-                
+                audio.SubmitBuffer(z80.wsg.samples);       
             }
         }
     }
