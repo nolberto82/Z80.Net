@@ -112,15 +112,15 @@
             // debuggerToolStripMenuItem
             // 
             this.debuggerToolStripMenuItem.Name = "debuggerToolStripMenuItem";
-            this.debuggerToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.debuggerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.debuggerToolStripMenuItem.Text = "Debugger";
             this.debuggerToolStripMenuItem.Click += new System.EventHandler(this.debuggerToolStripMenuItem_Click);
             // 
             // tilesToolStripMenuItem
             // 
             this.tilesToolStripMenuItem.Name = "tilesToolStripMenuItem";
-            this.tilesToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
-            this.tilesToolStripMenuItem.Text = "Tiles";
+            this.tilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tilesToolStripMenuItem.Text = "Graphics Viewer";
             this.tilesToolStripMenuItem.Click += new System.EventHandler(this.tilesToolStripMenuItem_Click);
             // 
             // dIPSwitchesToolStripMenuItem

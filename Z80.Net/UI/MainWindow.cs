@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using Z80.Net.Core;
+using Z80.Net.UI;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -16,24 +17,22 @@ namespace Z80.Net
 {
     public partial class MainWindow : Form
     {
-        Machine z80;
+        PacMachine z80;
         Display d;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            z80 = new Machine();
+            z80 = new PacMachine();
             Display.set_obj(z80);
             //Tiles.set_obj(z80);
 
-
-            Size = new System.Drawing.Size(232 * 2, 320 * 2);
+            Size = new Size(232 * 2, 320 * 2);
 
             d = new Display();
             d.Location = new Point(0, 24);
             d.Size = Size;
-            //d.Name = "display1";
 
             coin1PerGameToolStripMenuItem.Checked = true;
             lives3ToolStripMenuItem.Checked = true;
@@ -46,12 +45,12 @@ namespace Z80.Net
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd = new OpenFileDialog();
-            ofd.Filter = "Nes Roms (*.)|*";
+            ofd.Filter = "Roms (*.)|*";
             ofd.InitialDirectory = Environment.CurrentDirectory;
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                z80.mem.load_roms(ofd.FileName, 0);
+                z80.mem.LoadRoms(ofd.FileName, 0);
             }
         }
 
@@ -64,9 +63,9 @@ namespace Z80.Net
 
         private void tilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //TileWindow tiles = new TileWindow();
+            GfxViewer tiles = new GfxViewer(z80);
             //tiles.set_obj(z80);
-            //tiles.Show();
+            tiles.Show();
         }
 
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)

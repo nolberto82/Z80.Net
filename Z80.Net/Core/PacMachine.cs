@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Z80.Net.Core
 {
-    public class Machine
+    public class PacMachine
     {
         public Cpu cpu;
         public Gpu gpu;
@@ -21,7 +21,7 @@ namespace Z80.Net.Core
         public bool[] p1_keys;
         public bool[] p2_keys;
 
-        public Machine()
+        public PacMachine()
         {
             mem = new Memory(this);
             cpu = new Cpu(this);
@@ -32,7 +32,7 @@ namespace Z80.Net.Core
 
             Opcodes.create_opcodes();
 
-            mem.load_roms("", 0);
+            mem.LoadRoms("", 0);
 
             p1_keys = new bool[8];
             p2_keys = new bool[8];
@@ -41,7 +41,7 @@ namespace Z80.Net.Core
             cpu.reset();
         }
 
-        public Machine(bool test)
+        public PacMachine(bool test)
         {
             mem = new Memory(this);
             cpu = new Cpu(this);

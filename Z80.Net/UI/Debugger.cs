@@ -17,7 +17,7 @@ namespace Z80.Net
 {
     public partial class Debugger : Form
     {
-        private Machine z80;
+        private PacMachine z80;
 
         private Form gotodlg;
         private TextBox txtjump;
@@ -120,7 +120,7 @@ namespace Z80.Net
             }
         }
 
-        internal void set_obj(Machine m)
+        internal void set_obj(PacMachine m)
         {
             z80 = m;
         }
@@ -288,8 +288,8 @@ namespace Z80.Net
             else if (reg.pc == 0x002b)
             {
                 byte[] c = new byte[1];
-                c[0] = z80.mem.rb(0xffff);
-                Machine.res_str += Encoding.ASCII.GetString(c);
+                c[0] = z80.mem.Rb(0xffff);
+                PacMachine.res_str += Encoding.ASCII.GetString(c);
 
                 switch (reg.c)
                 {
@@ -308,7 +308,7 @@ namespace Z80.Net
                 }
             }
 
-            lblTestStatus.Text = Machine.res_str;
+            lblTestStatus.Text = PacMachine.res_str;
             //lblCycles.Text = "Cycles: " + z80.cpu.cycles.ToString();
         }
 
@@ -321,6 +321,7 @@ namespace Z80.Net
             update_disassembly();
             update_registers();
             update_hexbox((ushort)z80.raddr.addr, z80.raddr.v);
+            //z80.cpu.cycles -= (3072000 / 60);
         }
 
         private void btnReset_Click(object sender, EventArgs e)
@@ -332,7 +333,7 @@ namespace Z80.Net
             update_disassembly();
             update_registers();
 
-            if (Machine.test_running && lvTests.SelectedIndices[0] > -1)
+            if (PacMachine.test_running && lvTests.SelectedIndices[0] > -1)
             {
                 z80.mem.load_test();
                 z80.mem.set_test_number(lvTests.SelectedIndices[0]);
@@ -343,7 +344,7 @@ namespace Z80.Net
 
             hexMemory.Invalidate();
 
-            Machine.res_str = "";
+            PacMachine.res_str = "";
             get_test_messages();
         }
 
@@ -451,7 +452,7 @@ namespace Z80.Net
 
         private void lvTests_DoubleClick(object sender, EventArgs e)
         {
-            Machine.res_str = "";
+            PacMachine.res_str = "";
             get_test_messages();
 
             if (lvTests.SelectedIndices[0] > -1)

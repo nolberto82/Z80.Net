@@ -8,7 +8,7 @@ namespace Z80.Tests // Note: actual namespace depends on the project name.
 {
     internal class Program
     {
-        Machine z80;
+        PacMachine z80;
         List<Test>? tests;
         private string? test_result;
 
@@ -108,7 +108,7 @@ namespace Z80.Tests // Note: actual namespace depends on the project name.
             }
             else if (reg.pc == 0x002b)
             {
-                string c = Encoding.ASCII.GetString(new byte[] { z80.mem.rb(0xffff) });
+                string c = Encoding.ASCII.GetString(new byte[] { z80.mem.Rb(0xffff) });
                 test_result += c;
                 Console.Write(c);
 

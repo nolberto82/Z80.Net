@@ -21,7 +21,7 @@ namespace Z80.Net
 
     internal class Display : MonoGameControl
     {
-        private static Machine z80;
+        private static PacMachine z80;
         private static bool rom_loaded;
         private int divide = 1;
         private const int CYCLES_PER_FRAME = 3072000 / 60;
@@ -31,7 +31,7 @@ namespace Z80.Net
         private KeyboardState ks;
         private GamePadState gs;
 
-        public static void set_obj(Machine z)
+        public static void set_obj(PacMachine z)
         {
             z80 = z;
             rom_loaded = z.mem.rom_loaded;
@@ -74,7 +74,7 @@ namespace Z80.Net
             z80.p1_keys[7] = ks.IsKeyDown(Keys.Space) | gs.IsButtonDown(Buttons.Back);
 
             int max_cycles = CYCLES_PER_FRAME;
-            if (Machine.test_running)
+            if (PacMachine.test_running)
             {
                 divide = z80.tracer.logging ? 10 : 1;
                 max_cycles = 1000000;
@@ -117,7 +117,7 @@ namespace Z80.Net
 
                         z80.cpu.step();
 
-                        if (Machine.test_running)
+                        if (PacMachine.test_running)
                         {
                             if (z80.cpu.waddr == 0xfffe)
                             {
@@ -137,7 +137,7 @@ namespace Z80.Net
                         }
                         //}
 
-                        if (Machine.test_running)
+                        if (PacMachine.test_running)
                             Debugger.upd_test_info();
 
                         if (z80.cpu.state == Cpu.cstate.debugging)

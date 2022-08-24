@@ -43,11 +43,11 @@ namespace Z80.Net.Core
         #region PRIVATE
 
         private Memory mem;
-        private Machine z80;
+        private PacMachine z80;
 
         #endregion
 
-        public Cpu(Machine z80)
+        public Cpu(PacMachine z80)
         {
             mem = z80.mem;
             this.z80 = z80;
@@ -56,7 +56,7 @@ namespace Z80.Net.Core
 
         public void step()
         {
-            int op = mem.rbd(reg.pc);
+            int op = mem.Rbd(reg.pc);
 
             exec_00(op);
 
@@ -68,8 +68,8 @@ namespace Z80.Net.Core
 
         void set_port(int v)
         {
-            int id = mem.rbd((ushort)(reg.pc + 1));
-            mem.ports[mem.rbd((ushort)(reg.pc + 1))] = (byte)v;
+            int id = mem.Rbd((ushort)(reg.pc + 1));
+            mem.ports[mem.Rbd((ushort)(reg.pc + 1))] = (byte)v;
             reg.wz = (ushort)((id + 1) | reg.a << 8);
         }
 
@@ -84,13 +84,13 @@ namespace Z80.Net.Core
                     }
                 case 0x01:
                     {
-                        reg.bc = mem.rw((ushort)(reg.pc + 1));
+                        reg.bc = mem.Rw((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
                 case 0x02:
                     {
-                        mem.wb(reg.bc, reg.a);
+                        mem.Wb(reg.bc, reg.a);
                         reg.w = reg.a;
                         reg.z = (byte)(reg.c + 1);
                         advance(op);
@@ -116,7 +116,7 @@ namespace Z80.Net.Core
                     }
                 case 0x06:
                     {
-                        reg.b = mem.rb((ushort)(reg.pc + 1));
+                        reg.b = mem.Rb((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
@@ -135,7 +135,7 @@ namespace Z80.Net.Core
                     }
                 case 0x0a:
                     {
-                        reg.a = mem.rb(reg.bc);
+                        reg.a = mem.Rb(reg.bc);
                         reg.wz = (ushort)(reg.bc + 1);
                         advance(op);
                         break;
@@ -160,7 +160,7 @@ namespace Z80.Net.Core
                     }
                 case 0x0e:
                     {
-                        reg.c = mem.rb((ushort)(reg.pc + 1));
+                        reg.c = mem.Rb((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
@@ -177,13 +177,13 @@ namespace Z80.Net.Core
                     }
                 case 0x11:
                     {
-                        reg.de = mem.rw((ushort)(reg.pc + 1));
+                        reg.de = mem.Rw((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
                 case 0x12:
                     {
-                        mem.wb(reg.de, reg.a);
+                        mem.Wb(reg.de, reg.a);
                         reg.w = reg.a;
                         reg.z = (byte)(reg.e + 1);
                         advance(op);
@@ -209,7 +209,7 @@ namespace Z80.Net.Core
                     }
                 case 0x16:
                     {
-                        reg.d = mem.rb((ushort)(reg.pc + 1));
+                        reg.d = mem.Rb((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
@@ -233,7 +233,7 @@ namespace Z80.Net.Core
                     }
                 case 0x1a:
                     {
-                        reg.a = mem.rb(reg.de);
+                        reg.a = mem.Rb(reg.de);
                         reg.wz = (ushort)(reg.de + 1);
                         advance(op);
                         break;
@@ -258,7 +258,7 @@ namespace Z80.Net.Core
                     }
                 case 0x1e:
                     {
-                        reg.e = mem.rb((ushort)(reg.pc + 1));
+                        reg.e = mem.Rb((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
@@ -276,13 +276,13 @@ namespace Z80.Net.Core
 
                 case 0x21:
                     {
-                        reg.hl = mem.rw((ushort)(reg.pc + 1));
+                        reg.hl = mem.Rw((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
                 case 0x22:
                     {
-                        mem.ww(reg.wz = mem.rw((ushort)(reg.pc + 1)), reg.hl);
+                        mem.ww(reg.wz = mem.Rw((ushort)(reg.pc + 1)), reg.hl);
                         reg.wz++;
                         advance(op);
                         break;
@@ -307,7 +307,7 @@ namespace Z80.Net.Core
                     }
                 case 0x26:
                     {
-                        reg.h = mem.rb((ushort)(reg.pc + 1));
+                        reg.h = mem.Rb((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
@@ -330,7 +330,7 @@ namespace Z80.Net.Core
                     }
                 case 0x2a:
                     {
-                        reg.hl = mem.rw(reg.wz = mem.rw((ushort)(reg.pc + 1)));
+                        reg.hl = mem.Rw(reg.wz = mem.Rw((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -354,7 +354,7 @@ namespace Z80.Net.Core
                     }
                 case 0x2e:
                     {
-                        reg.l = mem.rb((ushort)(reg.pc + 1));
+                        reg.l = mem.Rb((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
@@ -371,13 +371,13 @@ namespace Z80.Net.Core
                     }
                 case 0x31:
                     {
-                        reg.sp = mem.rw((ushort)(reg.pc + 1));
+                        reg.sp = mem.Rw((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
                 case 0x32:
                     {
-                        mem.wb(reg.wz = mem.rw((ushort)(reg.pc + 1)), reg.a);
+                        mem.Wb(reg.wz = mem.Rw((ushort)(reg.pc + 1)), reg.a);
                         reg.wz++;
                         reg.w = reg.a;
                         advance(op);
@@ -391,19 +391,19 @@ namespace Z80.Net.Core
                     }
                 case 0x34:
                     {
-                        mem.wb(reg.hl, op_inc8(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_inc8(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
                 case 0x35:
                     {
-                        mem.wb(reg.hl, op_dec8(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_dec8(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
                 case 0x36:
                     {
-                        mem.wb(reg.hl, mem.rb((ushort)(reg.pc + 1)));
+                        mem.Wb(reg.hl, mem.Rb((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -426,7 +426,7 @@ namespace Z80.Net.Core
                     }
                 case 0x3a:
                     {
-                        reg.a = mem.rb(reg.wz = mem.rw((ushort)(reg.pc + 1)));
+                        reg.a = mem.Rb(reg.wz = mem.Rw((ushort)(reg.pc + 1)));
                         reg.wz++;
                         advance(op);
                         break;
@@ -451,7 +451,7 @@ namespace Z80.Net.Core
                     }
                 case 0x3e:
                     {
-                        reg.a = mem.rb((ushort)(reg.pc + 1));
+                        reg.a = mem.Rb((ushort)(reg.pc + 1));
                         advance(op);
                         break;
                     }
@@ -499,7 +499,7 @@ namespace Z80.Net.Core
                     }
                 case 0x46:
                     {
-                        reg.b = mem.rb(reg.hl);
+                        reg.b = mem.Rb(reg.hl);
                         advance(op);
                         break;
                     }
@@ -547,7 +547,7 @@ namespace Z80.Net.Core
                     }
                 case 0x4e:
                     {
-                        reg.c = mem.rb(reg.hl);
+                        reg.c = mem.Rb(reg.hl);
                         advance(op);
                         break;
                     }
@@ -594,7 +594,7 @@ namespace Z80.Net.Core
                     }
                 case 0x56:
                     {
-                        reg.d = mem.rb(reg.hl);
+                        reg.d = mem.Rb(reg.hl);
                         advance(op);
                         break;
                     }
@@ -641,7 +641,7 @@ namespace Z80.Net.Core
                     }
                 case 0x5e:
                     {
-                        reg.e = mem.rb(reg.hl);
+                        reg.e = mem.Rb(reg.hl);
                         advance(op);
                         break;
                     }
@@ -688,7 +688,7 @@ namespace Z80.Net.Core
                     }
                 case 0x66:
                     {
-                        reg.h = mem.rb(reg.hl);
+                        reg.h = mem.Rb(reg.hl);
                         advance(op);
                         break;
                     }
@@ -735,7 +735,7 @@ namespace Z80.Net.Core
                     }
                 case 0x6e:
                     {
-                        reg.l = mem.rb(reg.hl);
+                        reg.l = mem.Rb(reg.hl);
                         advance(op);
                         break;
                     }
@@ -748,37 +748,37 @@ namespace Z80.Net.Core
 
                 case 0x70:
                     {
-                        mem.wb(reg.hl, reg.b);
+                        mem.Wb(reg.hl, reg.b);
                         advance(op);
                         break;
                     }
                 case 0x71:
                     {
-                        mem.wb(reg.hl, reg.c);
+                        mem.Wb(reg.hl, reg.c);
                         advance(op);
                         break;
                     }
                 case 0x72:
                     {
-                        mem.wb(reg.hl, reg.d);
+                        mem.Wb(reg.hl, reg.d);
                         advance(op);
                         break;
                     }
                 case 0x73:
                     {
-                        mem.wb(reg.hl, reg.e);
+                        mem.Wb(reg.hl, reg.e);
                         advance(op);
                         break;
                     }
                 case 0x74:
                     {
-                        mem.wb(reg.hl, reg.h);
+                        mem.Wb(reg.hl, reg.h);
                         advance(op);
                         break;
                     }
                 case 0x75:
                     {
-                        mem.wb(reg.hl, reg.l);
+                        mem.Wb(reg.hl, reg.l);
                         advance(op);
                         break;
                     }
@@ -789,7 +789,7 @@ namespace Z80.Net.Core
                     }
                 case 0x77:
                     {
-                        mem.wb(reg.hl, reg.a);
+                        mem.Wb(reg.hl, reg.a);
                         advance(op);
                         break;
                     }
@@ -831,7 +831,7 @@ namespace Z80.Net.Core
                     }
                 case 0x7e:
                     {
-                        reg.a = mem.rb(reg.hl);
+                        reg.a = mem.Rb(reg.hl);
                         advance(op);
                         break;
                     }
@@ -878,7 +878,7 @@ namespace Z80.Net.Core
                     }
                 case 0x86:
                     {
-                        op_add8(mem.rb(reg.hl));
+                        op_add8(mem.Rb(reg.hl));
                         advance(op);
                         break;
                     }
@@ -926,7 +926,7 @@ namespace Z80.Net.Core
                     }
                 case 0x8e:
                     {
-                        op_adc8(mem.rb(reg.hl));
+                        op_adc8(mem.Rb(reg.hl));
                         advance(op);
                         break;
                     }
@@ -974,7 +974,7 @@ namespace Z80.Net.Core
                     }
                 case 0x96:
                     {
-                        op_sub8(mem.rb(reg.hl));
+                        op_sub8(mem.Rb(reg.hl));
                         advance(op);
                         break;
                     }
@@ -1022,7 +1022,7 @@ namespace Z80.Net.Core
                     }
                 case 0x9e:
                     {
-                        op_sbc8(mem.rb(reg.hl));
+                        op_sbc8(mem.Rb(reg.hl));
                         advance(op);
                         break;
                     }
@@ -1070,7 +1070,7 @@ namespace Z80.Net.Core
                     }
                 case 0xa6:
                     {
-                        op_and(mem.rb(reg.hl));
+                        op_and(mem.Rb(reg.hl));
                         advance(op);
                         break;
                     }
@@ -1118,7 +1118,7 @@ namespace Z80.Net.Core
                     }
                 case 0xae:
                     {
-                        op_xor(mem.rb(reg.hl));
+                        op_xor(mem.Rb(reg.hl));
                         advance(op);
                         break;
                     }
@@ -1166,7 +1166,7 @@ namespace Z80.Net.Core
                     }
                 case 0xb6:
                     {
-                        op_or(mem.rb(reg.hl));
+                        op_or(mem.Rb(reg.hl));
                         advance(op);
                         break;
                     }
@@ -1214,7 +1214,7 @@ namespace Z80.Net.Core
                     }
                 case 0xbe:
                     {
-                        op_cp(mem.rb(reg.hl));
+                        op_cp(mem.Rb(reg.hl));
                         advance(op);
                         break;
                     }
@@ -1259,7 +1259,7 @@ namespace Z80.Net.Core
                     }
                 case 0xc6:
                     {
-                        op_add8(mem.rb((ushort)(reg.pc + 1)));
+                        op_add8(mem.Rb((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -1299,7 +1299,7 @@ namespace Z80.Net.Core
                     }
                 case 0xce:
                     {
-                        op_adc8(mem.rb((ushort)(reg.pc + 1)));
+                        op_adc8(mem.Rb((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -1345,7 +1345,7 @@ namespace Z80.Net.Core
                     }
                 case 0xd6:
                     {
-                        op_sub8(mem.rb((ushort)(reg.pc + 1)));
+                        op_sub8(mem.Rb((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -1390,7 +1390,7 @@ namespace Z80.Net.Core
                     }
                 case 0xde:
                     {
-                        op_sbc8(mem.rb((ushort)(reg.pc + 1)));
+                        op_sbc8(mem.Rb((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -1414,7 +1414,7 @@ namespace Z80.Net.Core
                     }
                 case 0xe6:
                     {
-                        op_and(mem.rb((ushort)(reg.pc + 1)));
+                        op_and(mem.Rb((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -1448,7 +1448,7 @@ namespace Z80.Net.Core
                     }
                 case 0xee:
                     {
-                        op_xor(mem.rb((ushort)(reg.pc + 1)));
+                        op_xor(mem.Rb((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -1478,7 +1478,7 @@ namespace Z80.Net.Core
                     }
                 case 0xf6:
                     {
-                        op_or(mem.rb((ushort)(reg.pc + 1)));
+                        op_or(mem.Rb((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -1518,7 +1518,7 @@ namespace Z80.Net.Core
                     }
                 case 0xfe:
                     {
-                        op_cp(mem.rb((ushort)(reg.pc + 1)));
+                        op_cp(mem.Rb((ushort)(reg.pc + 1)));
                         advance(op);
                         break;
                     }
@@ -1538,7 +1538,7 @@ namespace Z80.Net.Core
 
             }
 
-            if (Machine.test_running)
+            if (PacMachine.test_running)
             {
                 if (op == 0x76)
                 {
@@ -1550,7 +1550,7 @@ namespace Z80.Net.Core
 
         void exec_cb(int op)
         {
-            byte b1 = mem.rbd((ushort)(reg.pc + 1));
+            byte b1 = mem.Rbd((ushort)(reg.pc + 1));
 
             switch (b1)
             {
@@ -1592,7 +1592,7 @@ namespace Z80.Net.Core
                     }
                 case 0x06:
                     {
-                        mem.wb(reg.hl, op_rlc(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_rlc(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -1640,7 +1640,7 @@ namespace Z80.Net.Core
                     }
                 case 0x0e:
                     {
-                        mem.wb(reg.hl, op_rrc(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_rrc(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -1688,7 +1688,7 @@ namespace Z80.Net.Core
                     }
                 case 0x16:
                     {
-                        mem.wb(reg.hl, op_rl(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_rl(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -1736,7 +1736,7 @@ namespace Z80.Net.Core
                     }
                 case 0x1e:
                     {
-                        mem.wb(reg.hl, op_rr(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_rr(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -1784,7 +1784,7 @@ namespace Z80.Net.Core
                     }
                 case 0x26:
                     {
-                        mem.wb(reg.hl, op_sla(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_sla(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -1832,7 +1832,7 @@ namespace Z80.Net.Core
                     }
                 case 0x2e:
                     {
-                        mem.wb(reg.hl, op_sra(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_sra(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -1880,7 +1880,7 @@ namespace Z80.Net.Core
                     }
                 case 0x36:
                     {
-                        mem.wb(reg.hl, op_sll(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_sll(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -1928,7 +1928,7 @@ namespace Z80.Net.Core
                     }
                 case 0x3e:
                     {
-                        mem.wb(reg.hl, op_srl(mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_srl(mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -1976,7 +1976,7 @@ namespace Z80.Net.Core
                     }
                 case 0x46:
                     {
-                        op_bit(0, mem.rb(reg.hl), reg.hl);
+                        op_bit(0, mem.Rb(reg.hl), reg.hl);
                         advance(op);
                         break;
                     }
@@ -2024,7 +2024,7 @@ namespace Z80.Net.Core
                     }
                 case 0x4e:
                     {
-                        op_bit(1, mem.rb(reg.hl), reg.hl);
+                        op_bit(1, mem.Rb(reg.hl), reg.hl);
                         advance(op);
                         break;
                     }
@@ -2072,7 +2072,7 @@ namespace Z80.Net.Core
                     }
                 case 0x56:
                     {
-                        op_bit(2, mem.rb(reg.hl), reg.hl);
+                        op_bit(2, mem.Rb(reg.hl), reg.hl);
                         advance(op);
                         break;
                     }
@@ -2120,7 +2120,7 @@ namespace Z80.Net.Core
                     }
                 case 0x5e:
                     {
-                        op_bit(3, mem.rb(reg.hl), reg.hl);
+                        op_bit(3, mem.Rb(reg.hl), reg.hl);
                         advance(op);
                         break;
                     }
@@ -2168,7 +2168,7 @@ namespace Z80.Net.Core
                     }
                 case 0x66:
                     {
-                        op_bit(4, mem.rb(reg.hl), reg.hl);
+                        op_bit(4, mem.Rb(reg.hl), reg.hl);
                         advance(op);
                         break;
                     }
@@ -2216,7 +2216,7 @@ namespace Z80.Net.Core
                     }
                 case 0x6e:
                     {
-                        op_bit(5, mem.rb(reg.hl), reg.hl);
+                        op_bit(5, mem.Rb(reg.hl), reg.hl);
                         advance(op);
                         break;
                     }
@@ -2264,7 +2264,7 @@ namespace Z80.Net.Core
                     }
                 case 0x76:
                     {
-                        op_bit(6, mem.rb(reg.hl), reg.hl);
+                        op_bit(6, mem.Rb(reg.hl), reg.hl);
                         advance(op);
                         break;
                     }
@@ -2312,7 +2312,7 @@ namespace Z80.Net.Core
                     }
                 case 0x7e:
                     {
-                        op_bit(7, mem.rb(reg.hl), reg.hl);
+                        op_bit(7, mem.Rb(reg.hl), reg.hl);
                         advance(op);
                         break;
                     }
@@ -2360,7 +2360,7 @@ namespace Z80.Net.Core
                     }
                 case 0x86:
                     {
-                        mem.wb(reg.hl, op_res(0, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_res(0, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2408,7 +2408,7 @@ namespace Z80.Net.Core
                     }
                 case 0x8e:
                     {
-                        mem.wb(reg.hl, op_res(1, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_res(1, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2456,7 +2456,7 @@ namespace Z80.Net.Core
                     }
                 case 0x96:
                     {
-                        mem.wb(reg.hl, op_res(2, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_res(2, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2504,7 +2504,7 @@ namespace Z80.Net.Core
                     }
                 case 0x9e:
                     {
-                        mem.wb(reg.hl, op_res(3, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_res(3, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2552,7 +2552,7 @@ namespace Z80.Net.Core
                     }
                 case 0xa6:
                     {
-                        mem.wb(reg.hl, op_res(4, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_res(4, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2600,7 +2600,7 @@ namespace Z80.Net.Core
                     }
                 case 0xae:
                     {
-                        mem.wb(reg.hl, op_res(5, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_res(5, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2648,7 +2648,7 @@ namespace Z80.Net.Core
                     }
                 case 0xb6:
                     {
-                        mem.wb(reg.hl, op_res(6, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_res(6, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2696,7 +2696,7 @@ namespace Z80.Net.Core
                     }
                 case 0xbe:
                     {
-                        mem.wb(reg.hl, op_res(7, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_res(7, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2744,7 +2744,7 @@ namespace Z80.Net.Core
                     }
                 case 0xc6:
                     {
-                        mem.wb(reg.hl, op_set(0, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_set(0, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2792,7 +2792,7 @@ namespace Z80.Net.Core
                     }
                 case 0xce:
                     {
-                        mem.wb(reg.hl, op_set(1, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_set(1, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2840,7 +2840,7 @@ namespace Z80.Net.Core
                     }
                 case 0xd6:
                     {
-                        mem.wb(reg.hl, op_set(2, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_set(2, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2888,7 +2888,7 @@ namespace Z80.Net.Core
                     }
                 case 0xde:
                     {
-                        mem.wb(reg.hl, op_set(3, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_set(3, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2936,7 +2936,7 @@ namespace Z80.Net.Core
                     }
                 case 0xe6:
                     {
-                        mem.wb(reg.hl, op_set(4, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_set(4, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -2984,7 +2984,7 @@ namespace Z80.Net.Core
                     }
                 case 0xee:
                     {
-                        mem.wb(reg.hl, op_set(5, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_set(5, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -3032,7 +3032,7 @@ namespace Z80.Net.Core
                     }
                 case 0xf6:
                     {
-                        mem.wb(reg.hl, op_set(6, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_set(6, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -3080,7 +3080,7 @@ namespace Z80.Net.Core
                     }
                 case 0xfe:
                     {
-                        mem.wb(reg.hl, op_set(7, mem.rb(reg.hl)));
+                        mem.Wb(reg.hl, op_set(7, mem.Rb(reg.hl)));
                         advance(op);
                         break;
                     }
@@ -3101,7 +3101,7 @@ namespace Z80.Net.Core
 
         void exec_dd(int op)
         {
-            byte b1 = mem.rbd((ushort)(reg.pc + 1));
+            byte b1 = mem.Rbd((ushort)(reg.pc + 1));
 
             switch (b1)
             {
@@ -3121,13 +3121,13 @@ namespace Z80.Net.Core
 
                 case 0x21:
                     {
-                        reg.ix = mem.rw((ushort)(reg.pc + 2));
+                        reg.ix = mem.Rw((ushort)(reg.pc + 2));
                         advance(op);
                         break;
                     }
                 case 0x22:
                     {
-                        mem.ww(mem.rw((ushort)(reg.pc + 2)), reg.ix);
+                        mem.ww(mem.Rw((ushort)(reg.pc + 2)), reg.ix);
                         advance(op);
                         break;
                     }
@@ -3151,7 +3151,7 @@ namespace Z80.Net.Core
                     }
                 case 0x26:
                     {
-                        reg.ixh = mem.rb((ushort)(reg.pc + 2));
+                        reg.ixh = mem.Rb((ushort)(reg.pc + 2));
                         advance(op);
                         break;
                     }
@@ -3164,7 +3164,7 @@ namespace Z80.Net.Core
                     }
                 case 0x2a:
                     {
-                        reg.ix = mem.rw(mem.rw((ushort)(reg.pc + 2)));
+                        reg.ix = mem.Rw(mem.Rw((ushort)(reg.pc + 2)));
                         advance(op);
                         break;
                     }
@@ -3188,7 +3188,7 @@ namespace Z80.Net.Core
                     }
                 case 0x2e:
                     {
-                        reg.ixl = mem.rb((ushort)(reg.pc + 2));
+                        reg.ixl = mem.Rb((ushort)(reg.pc + 2));
                         advance(op);
                         break;
                     }
@@ -3207,8 +3207,8 @@ namespace Z80.Net.Core
                     }
                 case 0x36:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, mem.rb((ushort)(reg.pc + 3)));
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, mem.Rb((ushort)(reg.pc + 3)));
                         advance(op);
                         break;
                     }
@@ -3230,107 +3230,107 @@ namespace Z80.Net.Core
 
                 case 0x46:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rw((ushort)(reg.pc + 2)));
-                        reg.b = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.ix + mem.Rw((ushort)(reg.pc + 2)));
+                        reg.b = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x4e:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        reg.c = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.c = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x56:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        reg.d = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.d = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x5e:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        reg.e = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.e = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x66:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        reg.h = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.h = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x6e:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        reg.l = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.l = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x70:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.b);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.b);
                         advance(op);
                         break;
                     }
                 case 0x71:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.c);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.c);
                         advance(op);
                         break;
                     }
                 case 0x72:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.d);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.d);
                         advance(op);
                         break;
                     }
                 case 0x73:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.e);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.e);
                         advance(op);
                         break;
                     }
                 case 0x74:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.h);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.h);
                         advance(op);
                         break;
                     }
                 case 0x75:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.l);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.l);
                         advance(op);
                         break;
                     }
 
                 case 0x77:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.a);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.a);
                         advance(op);
                         break;
                     }
 
                 case 0x7e:
                     {
-                        reg.wz = (ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)));
-                        reg.a = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.a = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
@@ -3349,7 +3349,7 @@ namespace Z80.Net.Core
                     }
                 case 0x86:
                     {
-                        op_add8(mem.rb((ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)))));
+                        op_add8(mem.Rb((ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3368,7 +3368,7 @@ namespace Z80.Net.Core
                     }
                 case 0x8e:
                     {
-                        op_adc8(mem.rb((ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)))));
+                        op_adc8(mem.Rb((ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3387,7 +3387,7 @@ namespace Z80.Net.Core
                     }
                 case 0x96:
                     {
-                        op_sub8(mem.rb((ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)))));
+                        op_sub8(mem.Rb((ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3406,7 +3406,7 @@ namespace Z80.Net.Core
                     }
                 case 0x9e:
                     {
-                        op_sbc8(mem.rb((ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)))));
+                        op_sbc8(mem.Rb((ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3425,7 +3425,7 @@ namespace Z80.Net.Core
                     }
                 case 0xa6:
                     {
-                        op_and(mem.rb((ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)))));
+                        op_and(mem.Rb((ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3444,7 +3444,7 @@ namespace Z80.Net.Core
                     }
                 case 0xae:
                     {
-                        op_xor(mem.rb((ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)))));
+                        op_xor(mem.Rb((ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3463,7 +3463,7 @@ namespace Z80.Net.Core
                     }
                 case 0xb6:
                     {
-                        op_or(mem.rb((ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)))));
+                        op_or(mem.Rb((ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3482,7 +3482,7 @@ namespace Z80.Net.Core
                     }
                 case 0xbe:
                     {
-                        op_cp(mem.rb((ushort)(reg.ix + mem.rb((ushort)(reg.pc + 2)))));
+                        op_cp(mem.Rb((ushort)(reg.ix + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3520,7 +3520,7 @@ namespace Z80.Net.Core
 
         void exec_ed(int op)
         {
-            byte b1 = mem.rbd((ushort)(reg.pc + 1));
+            byte b1 = mem.Rbd((ushort)(reg.pc + 1));
 
             switch (b1)
             {
@@ -3532,7 +3532,7 @@ namespace Z80.Net.Core
                     }
                 case 0x43:
                     {
-                        mem.ww(mem.rw((ushort)(reg.pc + 2)), reg.bc);
+                        mem.ww(mem.Rw((ushort)(reg.pc + 2)), reg.bc);
                         advance(op);
                         break;
                     }
@@ -3558,7 +3558,7 @@ namespace Z80.Net.Core
                     }
                 case 0x4b:
                     {
-                        reg.bc = mem.rw(mem.rw((ushort)(reg.pc + 2)));
+                        reg.bc = mem.Rw(mem.Rw((ushort)(reg.pc + 2)));
                         advance(op);
                         break;
                     }
@@ -3571,7 +3571,7 @@ namespace Z80.Net.Core
                     }
                 case 0x53:
                     {
-                        mem.ww(mem.rw((ushort)(reg.pc + 2)), reg.de);
+                        mem.ww(mem.Rw((ushort)(reg.pc + 2)), reg.de);
                         advance(op);
                         break;
                     }
@@ -3584,7 +3584,7 @@ namespace Z80.Net.Core
                     }
                 case 0x5b:
                     {
-                        reg.de = mem.rw(mem.rw((ushort)(reg.pc + 2)));
+                        reg.de = mem.Rw(mem.Rw((ushort)(reg.pc + 2)));
                         advance(op);
                         break;
                     }
@@ -3634,7 +3634,7 @@ namespace Z80.Net.Core
                     }
                 case 0x73:
                     {
-                        mem.ww(reg.wz = mem.rw((ushort)(reg.pc + 2)), reg.sp);
+                        mem.ww(reg.wz = mem.Rw((ushort)(reg.pc + 2)), reg.sp);
                         reg.wz++;
                         advance(op);
                         break;
@@ -3648,7 +3648,7 @@ namespace Z80.Net.Core
                     }
                 case 0x7b:
                     {
-                        reg.sp = mem.rw(reg.wz = mem.rw((ushort)(reg.pc + 2)));
+                        reg.sp = mem.Rw(reg.wz = mem.Rw((ushort)(reg.pc + 2)));
                         reg.wz++;
                         advance(op);
                         break;
@@ -3712,7 +3712,7 @@ namespace Z80.Net.Core
 
         void exec_fd(int op)
         {
-            byte b1 = mem.rbd((ushort)(reg.pc + 1));
+            byte b1 = mem.Rbd((ushort)(reg.pc + 1));
 
             switch (b1)
             {
@@ -3732,13 +3732,13 @@ namespace Z80.Net.Core
 
                 case 0x21:
                     {
-                        reg.iy = mem.rw((ushort)(reg.pc + 2));
+                        reg.iy = mem.Rw((ushort)(reg.pc + 2));
                         advance(op);
                         break;
                     }
                 case 0x22:
                     {
-                        mem.ww(mem.rw((ushort)(reg.pc + 2)), reg.iy);
+                        mem.ww(mem.Rw((ushort)(reg.pc + 2)), reg.iy);
                         advance(op);
                         break;
                     }
@@ -3751,7 +3751,7 @@ namespace Z80.Net.Core
 
                 case 0x26:
                     {
-                        reg.iyh = mem.rb((ushort)(reg.pc + 2));
+                        reg.iyh = mem.Rb((ushort)(reg.pc + 2));
                         advance(op);
                         break;
                     }
@@ -3764,7 +3764,7 @@ namespace Z80.Net.Core
                     }
                 case 0x2a:
                     {
-                        reg.iy = mem.rw(mem.rw((ushort)(reg.pc + 2)));
+                        reg.iy = mem.Rw(mem.Rw((ushort)(reg.pc + 2)));
                         advance(op);
                         break;
                     }
@@ -3777,7 +3777,7 @@ namespace Z80.Net.Core
 
                 case 0x2e:
                     {
-                        reg.iyl = mem.rb((ushort)(reg.pc + 2));
+                        reg.iyl = mem.Rb((ushort)(reg.pc + 2));
                         advance(op);
                         break;
                     }
@@ -3796,8 +3796,8 @@ namespace Z80.Net.Core
                     }
                 case 0x36:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, mem.rb((ushort)(reg.pc + 3)));
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, mem.Rb((ushort)(reg.pc + 3)));
                         advance(op);
                         break;
                     }
@@ -3818,107 +3818,107 @@ namespace Z80.Net.Core
 
                 case 0x46:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        reg.b = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.b = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x4e:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        reg.c = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.c = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x56:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        reg.d = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.d = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x5e:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        reg.e = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.e = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x66:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        reg.h = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.h = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x6e:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        reg.l = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.l = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x70:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.b);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.b);
                         advance(op);
                         break;
                     }
                 case 0x71:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.c);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.c);
                         advance(op);
                         break;
                     }
                 case 0x72:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.d);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.d);
                         advance(op);
                         break;
                     }
                 case 0x73:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.e);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.e);
                         advance(op);
                         break;
                     }
                 case 0x74:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.h);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.h);
                         advance(op);
                         break;
                     }
                 case 0x75:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.l);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.l);
                         advance(op);
                         break;
                     }
 
                 case 0x77:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        mem.wb(reg.wz, reg.a);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        mem.Wb(reg.wz, reg.a);
                         advance(op);
                         break;
                     }
 
                 case 0x7e:
                     {
-                        reg.wz = (ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)));
-                        reg.a = mem.rb(reg.wz);
+                        reg.wz = (ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)));
+                        reg.a = mem.Rb(reg.wz);
                         advance(op);
                         break;
                     }
@@ -3937,7 +3937,7 @@ namespace Z80.Net.Core
                     }
                 case 0x86:
                     {
-                        op_add8(mem.rb((ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)))));
+                        op_add8(mem.Rb((ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3957,7 +3957,7 @@ namespace Z80.Net.Core
                     }
                 case 0x8e:
                     {
-                        op_adc8(mem.rb((ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)))));
+                        op_adc8(mem.Rb((ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3976,7 +3976,7 @@ namespace Z80.Net.Core
                     }
                 case 0x96:
                     {
-                        op_sub8(mem.rb((ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)))));
+                        op_sub8(mem.Rb((ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -3995,7 +3995,7 @@ namespace Z80.Net.Core
                     }
                 case 0x9e:
                     {
-                        op_sbc8(mem.rb((ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)))));
+                        op_sbc8(mem.Rb((ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -4014,7 +4014,7 @@ namespace Z80.Net.Core
                     }
                 case 0xa6:
                     {
-                        op_and(mem.rb((ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)))));
+                        op_and(mem.Rb((ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -4033,7 +4033,7 @@ namespace Z80.Net.Core
                     }
                 case 0xae:
                     {
-                        op_xor(mem.rb((ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)))));
+                        op_xor(mem.Rb((ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -4052,7 +4052,7 @@ namespace Z80.Net.Core
                     }
                 case 0xb6:
                     {
-                        op_or(mem.rb((ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)))));
+                        op_or(mem.Rb((ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -4071,7 +4071,7 @@ namespace Z80.Net.Core
                     }
                 case 0xbe:
                     {
-                        op_cp(mem.rb((ushort)(reg.iy + mem.rb((ushort)(reg.pc + 2)))));
+                        op_cp(mem.Rb((ushort)(reg.iy + mem.Rb((ushort)(reg.pc + 2)))));
                         advance(op);
                         break;
                     }
@@ -4106,65 +4106,65 @@ namespace Z80.Net.Core
 
         void exec_ddfd(int op, int b1, int rx)
         {
-            byte b3 = mem.rbd((ushort)(reg.pc + 3));
+            byte b3 = mem.Rbd((ushort)(reg.pc + 3));
 
-            reg.wz = (ushort)(rx + mem.rb((ushort)(reg.pc + 2)));
+            reg.wz = (ushort)(rx + mem.Rb((ushort)(reg.pc + 2)));
 
             switch (b3)
             {
 
                 case 0x06:
                     {
-                        mem.wb(reg.wz, op_rlc(mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_rlc(mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x0e:
                     {
-                        mem.wb(reg.wz, op_rrc(mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_rrc(mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x16:
                     {
-                        mem.wb(reg.wz, op_rl(mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_rl(mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x1e:
                     {
-                        mem.wb(reg.wz, op_rr(mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_rr(mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x26:
                     {
-                        mem.wb(reg.wz, op_sla(mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_sla(mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x2e:
                     {
-                        mem.wb(reg.wz, op_sra(mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_sra(mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x36:
                     {
-                        mem.wb(reg.wz, op_sll(mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_sll(mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x3e:
                     {
-                        mem.wb(reg.wz, op_srl(mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_srl(mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
@@ -4172,168 +4172,168 @@ namespace Z80.Net.Core
                 case 0x46:
                     {
                         //reg.wz = reg + mem.rb(reg.pc + 2);
-                        op_bit(0, mem.rb(reg.wz), reg.wz);
+                        op_bit(0, mem.Rb(reg.wz), reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x4e:
                     {
-                        op_bit(1, mem.rb(reg.wz), reg.wz);
+                        op_bit(1, mem.Rb(reg.wz), reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x56:
                     {
-                        op_bit(2, mem.rb(reg.wz), reg.wz);
+                        op_bit(2, mem.Rb(reg.wz), reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x5e:
                     {
-                        op_bit(3, mem.rb(reg.wz), reg.wz);
+                        op_bit(3, mem.Rb(reg.wz), reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x66:
                     {
-                        op_bit(4, mem.rb(reg.wz), reg.wz);
+                        op_bit(4, mem.Rb(reg.wz), reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x6e:
                     {
-                        op_bit(5, mem.rb(reg.wz), reg.wz);
+                        op_bit(5, mem.Rb(reg.wz), reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x76:
                     {
-                        op_bit(6, mem.rb(reg.wz), reg.wz);
+                        op_bit(6, mem.Rb(reg.wz), reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x7e:
                     {
-                        op_bit(7, mem.rb(reg.wz), reg.wz);
+                        op_bit(7, mem.Rb(reg.wz), reg.wz);
                         advance(op);
                         break;
                     }
 
                 case 0x86:
                     {
-                        mem.wb(reg.wz, op_res(0, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_res(0, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x8e:
                     {
-                        mem.wb(reg.wz, op_res(1, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_res(1, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x96:
                     {
-                        mem.wb(reg.wz, op_res(2, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_res(2, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0x9e:
                     {
-                        mem.wb(reg.wz, op_res(3, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_res(3, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xa6:
                     {
-                        mem.wb(reg.wz, op_res(4, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_res(4, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xae:
                     {
-                        mem.wb(reg.wz, op_res(5, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_res(5, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xb6:
                     {
-                        mem.wb(reg.wz, op_res(6, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_res(6, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xbe:
                     {
-                        mem.wb(reg.wz, op_res(7, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_res(7, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xc6:
                     {
-                        mem.wb(reg.wz, op_set(0, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_set(0, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xce:
                     {
-                        mem.wb(reg.wz, op_set(1, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_set(1, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xd6:
                     {
-                        mem.wb(reg.wz, op_set(2, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_set(2, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xde:
                     {
-                        mem.wb(reg.wz, op_set(3, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_set(3, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xe6:
                     {
-                        mem.wb(reg.wz, op_set(4, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_set(4, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xee:
                     {
-                        mem.wb(reg.wz, op_set(5, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_set(5, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xf6:
                     {
-                        mem.wb(reg.wz, op_set(6, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_set(6, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
 
                 case 0xfe:
                     {
-                        mem.wb(reg.wz, op_set(7, mem.rb(reg.wz)));
+                        mem.Wb(reg.wz, op_set(7, mem.Rb(reg.wz)));
                         advance(op);
                         break;
                     }
@@ -4457,7 +4457,7 @@ namespace Z80.Net.Core
             if (flag)
             {
                 op_push((ushort)(reg.pc + 3));
-                reg.wz = reg.pc = mem.rw((ushort)(reg.pc + 1));
+                reg.wz = reg.pc = mem.Rw((ushort)(reg.pc + 1));
                 cycles += disasm_00[op].cycles;
             }
             else
@@ -4494,7 +4494,7 @@ namespace Z80.Net.Core
 
         void op_cpd()
         {
-            int v = reg.a - mem.rb(reg.hl);
+            int v = reg.a - mem.Rb(reg.hl);
 
             set_flag(1, FN);
             set_flag(reg.bc - 1, FP);
@@ -4516,20 +4516,20 @@ namespace Z80.Net.Core
 
             if (reg.bc == 0 || ((reg.f & FZ) > 0))
             {
-                cycles += disasm_ed[mem.rb((ushort)(reg.pc + 1))].cycles2;
+                cycles += disasm_ed[mem.Rb((ushort)(reg.pc + 1))].cycles2;
                 add_pc(op);
             }
             else
             {
                 reg.wz = (ushort)(reg.pc + 1);
-                cycles += disasm_ed[mem.rb((ushort)(reg.pc + 1))].cycles;
+                cycles += disasm_ed[mem.Rb((ushort)(reg.pc + 1))].cycles;
             }
 
         }
 
         void op_cpi()
         {
-            int v = reg.a - mem.rb(reg.hl);
+            int v = reg.a - mem.Rb(reg.hl);
 
             set_flag(1, FN);
             set_flag(reg.bc - 1, FP);
@@ -4551,13 +4551,13 @@ namespace Z80.Net.Core
 
             if (reg.bc == 0 || (reg.f & FZ) > 0)
             {
-                cycles += disasm_ed[mem.rb((ushort)(reg.pc + 1))].cycles2;
+                cycles += disasm_ed[mem.Rb((ushort)(reg.pc + 1))].cycles2;
                 add_pc(op);
             }
             else
             {
                 reg.wz = (ushort)(reg.pc + 1);
-                cycles += disasm_ed[mem.rb((ushort)(reg.pc + 1))].cycles;
+                cycles += disasm_ed[mem.Rb((ushort)(reg.pc + 1))].cycles;
             }
         }
 
@@ -4622,20 +4622,20 @@ namespace Z80.Net.Core
         void op_dechl(int r1, int r2)
         {
             ushort a = get_addr(r1, r2);
-            mem.wb(a, op_dec8(mem.rb(a)));
+            mem.Wb(a, op_dec8(mem.Rb(a)));
         }
 
         void op_djnz(int r1)
         {
             if (--reg.b > 0)
             {
-                reg.wz = reg.pc += (ushort)((sbyte)mem.rb((ushort)(reg.pc + 1)) + 2);
-                cycles += disasm_00[mem.rb(reg.pc)].cycles;
+                reg.wz = reg.pc += (ushort)((sbyte)mem.Rb((ushort)(reg.pc + 1)) + 2);
+                cycles += disasm_00[mem.Rb(reg.pc)].cycles;
             }
             else
             {
                 reg.pc += 2;
-                cycles += disasm_00[mem.rb(reg.pc)].cycles2;
+                cycles += disasm_00[mem.Rb(reg.pc)].cycles2;
             }
 
         }
@@ -4668,7 +4668,7 @@ namespace Z80.Net.Core
                 {
                     int intaddr = reg.i << 8 | mem.ports[0];
                     reg.sp -= 2;
-                    reg.pc = mem.rw((ushort)intaddr);
+                    reg.pc = mem.Rw((ushort)intaddr);
                     halt = false;
                     inte = false;
                 }
@@ -4694,12 +4694,12 @@ namespace Z80.Net.Core
         void op_inchl(int r1, int r2)
         {
             ushort a = get_addr(r1, r2);
-            mem.wb(a, op_inc8(mem.rb(a)));
+            mem.Wb(a, op_inc8(mem.Rb(a)));
         }
 
         void op_jp(int op, bool flag)
         {
-            reg.wz = mem.rw((ushort)(reg.pc + 1));
+            reg.wz = mem.Rw((ushort)(reg.pc + 1));
             if (flag)
             {
                 reg.pc = reg.wz;
@@ -4716,7 +4716,7 @@ namespace Z80.Net.Core
         {
             if (flag)
             {
-                reg.pc += (ushort)((sbyte)mem.rb((ushort)(reg.pc + 1)) + 2);
+                reg.pc += (ushort)((sbyte)mem.Rb((ushort)(reg.pc + 1)) + 2);
                 cycles += disasm_00[op].cycles;
                 return true;
             }
@@ -4729,12 +4729,12 @@ namespace Z80.Net.Core
 
         void op_ldd()
         {
-            mem.wb(reg.de, mem.rb(reg.hl));
+            mem.Wb(reg.de, mem.Rb(reg.hl));
 
             set_flag(0, FN);
             set_flag(reg.bc - 1, FP);
             set_flag(0, FH);
-            int xy = mem.rb(reg.hl);
+            int xy = mem.Rb(reg.hl);
             set_flag((xy + reg.a) & FX, FX);
             set_flag((xy + reg.a) & FN, FY);
 
@@ -4749,21 +4749,21 @@ namespace Z80.Net.Core
 
             if ((int)reg.bc == 0)
             {
-                cycles += disasm_ed[mem.rb((ushort)(reg.pc + 1))].cycles2;
+                cycles += disasm_ed[mem.Rb((ushort)(reg.pc + 1))].cycles2;
                 add_pc(op);
             }
             else
-                cycles += disasm_ed[mem.rb((ushort)(reg.pc + 1))].cycles;
+                cycles += disasm_ed[mem.Rb((ushort)(reg.pc + 1))].cycles;
         }
 
         void op_ldi()
         {
-            mem.wb(reg.de, mem.rb(reg.hl));
+            mem.Wb(reg.de, mem.Rb(reg.hl));
 
             set_flag(0, FN);
             set_flag(reg.bc - 1, FP);
             set_flag(0, FH);
-            int xy = mem.rb(reg.hl);
+            int xy = mem.Rb(reg.hl);
             set_flag((xy + reg.a) & FX, FX);
             set_flag((xy + reg.a) & FN, FY);
 
@@ -4778,13 +4778,13 @@ namespace Z80.Net.Core
 
             if ((int)reg.bc == 0)
             {
-                cycles += disasm_ed[mem.rb((ushort)(reg.pc + 1))].cycles2;
+                cycles += disasm_ed[mem.Rb((ushort)(reg.pc + 1))].cycles2;
                 add_pc(op);
             }
             else
             {
                 reg.wz = (ushort)(reg.pc + 1);
-                cycles += disasm_ed[mem.rb((ushort)(reg.pc + 1))].cycles;
+                cycles += disasm_ed[mem.Rb((ushort)(reg.pc + 1))].cycles;
             }
         }
 
@@ -4822,27 +4822,27 @@ namespace Z80.Net.Core
 
         int op_pop8()
         {
-            return mem.rb(reg.sp++); ;
+            return mem.Rb(reg.sp++); ;
         }
 
         ushort op_pop()
         {
             int h = 0, l = 0;
-            l = mem.rb(reg.sp++);
-            h = mem.rb(reg.sp++);
+            l = mem.Rb(reg.sp++);
+            h = mem.Rb(reg.sp++);
 
             return (ushort)(h << 8 | l);
         }
 
         void op_push8(int r1)
         {
-            mem.wb(--reg.sp, (byte)r1);
+            mem.Wb(--reg.sp, (byte)r1);
         }
 
         void op_push(int r1)
         {
-            mem.wb(--reg.sp, (byte)(r1 >> 8));
-            mem.wb(--reg.sp, (byte)(r1 & 0xff));
+            mem.Wb(--reg.sp, (byte)(r1 >> 8));
+            mem.Wb(--reg.sp, (byte)(r1 & 0xff));
         }
 
         void op_ret(int op, bool flag)
@@ -4934,9 +4934,9 @@ namespace Z80.Net.Core
 
         void op_rld()
         {
-            int v = mem.rb(reg.hl);
+            int v = mem.Rb(reg.hl);
 
-            mem.wb(reg.hl, (byte)((v << 4) + ((reg.a & 0xf))));
+            mem.Wb(reg.hl, (byte)((v << 4) + ((reg.a & 0xf))));
             reg.a = (byte)((reg.a & 0xf0) + (v >> 4));
 
             set_flag(0, FN);
@@ -5016,9 +5016,9 @@ namespace Z80.Net.Core
 
         void op_rrd()
         {
-            int v = mem.rb(reg.hl);
+            int v = mem.Rb(reg.hl);
 
-            mem.wb(reg.hl, (byte)((v >> 4) + ((reg.a & 0xf) << 4)));
+            mem.Wb(reg.hl, (byte)((v >> 4) + ((reg.a & 0xf) << 4)));
             reg.a = (byte)((reg.a & 0xf0) + (v & 0xf));
 
             set_flag(0, FN);
@@ -5201,7 +5201,7 @@ namespace Z80.Net.Core
             {
                 int intaddr = reg.i << 8 | mem.ports[0];
                 op_push(reg.pc);
-                reg.pc = mem.rw((ushort)intaddr);
+                reg.pc = mem.Rw((ushort)intaddr);
                 halt = false;
                 inte = false;
             }
@@ -5220,11 +5220,11 @@ namespace Z80.Net.Core
 
         void add_pc(int op)
         {
-            byte b1 = mem.rbd((ushort)(reg.pc + 1));
-            byte b3 = mem.rbd((ushort)(reg.pc + 3));
+            byte b1 = mem.Rbd((ushort)(reg.pc + 1));
+            byte b3 = mem.Rbd((ushort)(reg.pc + 3));
 
             if (op == 0xcb)
-                reg.pc += disasm_cb[mem.rbd((ushort)(reg.pc + 1))].size;
+                reg.pc += disasm_cb[mem.Rbd((ushort)(reg.pc + 1))].size;
             else if (op == 0xdd)
             {
                 if (b1 == 0xcb)
@@ -5233,7 +5233,7 @@ namespace Z80.Net.Core
                     reg.pc += disasm_dd[b1].size;
             }
             else if (op == 0xed)
-                reg.pc += disasm_ed[mem.rbd((ushort)(reg.pc + 1))].size;
+                reg.pc += disasm_ed[mem.Rbd((ushort)(reg.pc + 1))].size;
             else if (op == 0xfd)
             {
                 if (b1 == 0xcb)
@@ -5248,11 +5248,11 @@ namespace Z80.Net.Core
         void add_cyc(int op)
         {
             //int op = mem.rb(rgt.reg.pc + 0);
-            byte b1 = mem.rbd((ushort)(reg.pc + 1));
-            byte b3 = mem.rbd((ushort)(reg.pc + 3));
+            byte b1 = mem.Rbd((ushort)(reg.pc + 1));
+            byte b3 = mem.Rbd((ushort)(reg.pc + 3));
 
             if (op == 0xcb)
-                cycles += disasm_cb[mem.rbd((ushort)(reg.pc + 1))].cycles;
+                cycles += disasm_cb[mem.Rbd((ushort)(reg.pc + 1))].cycles;
             else if (op == 0xdd)
             {
                 if (b1 == 0xcb)
@@ -5261,7 +5261,7 @@ namespace Z80.Net.Core
                     cycles += disasm_dd[b1].cycles;
             }
             else if (op == 0xed)
-                cycles += disasm_ed[mem.rbd((ushort)(reg.pc + 1))].cycles;
+                cycles += disasm_ed[mem.Rbd((ushort)(reg.pc + 1))].cycles;
             else if (op == 0xfd)
             {
                 if (b1 == 0xcb)
@@ -5302,7 +5302,7 @@ namespace Z80.Net.Core
 
         ushort get_addr(int a1, int a2)
         {
-            return (ushort)(a1 + mem.rb((ushort)a2));
+            return (ushort)(a1 + mem.Rb((ushort)a2));
         }
 
         void advance(int op)
@@ -5337,7 +5337,7 @@ namespace Z80.Net.Core
 
             cycles = 0;
 
-            mem.reset();
+            mem.Reset();
         }
 
     }

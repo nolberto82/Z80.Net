@@ -11,8 +11,10 @@ namespace Z80.Net.Core
     public class Gpu
     {
         public uint[] display_pix;
-        uint[] tile_ids, sprite_ids;
         public uint[] tile;
+
+        private uint[] sprite_ids, tile_pix;
+        private uint[] tile_ids;
 
         Memory mem;
 
@@ -30,12 +32,18 @@ namespace Z80.Net.Core
         }
         sprite_dec_t[] spr_off;
 
-        public Gpu(Machine z80)
+        public uint[] get_tile_ids()
+        {
+            return tile_ids;
+        }
+
+        public Gpu(PacMachine z80)
         {
             mem = z80.mem;
             display_pix = new uint[224 * 288];
             tile_ids = new uint[128 * 128];
             sprite_ids = new uint[128 * 128];
+            tile_pix = new uint[128 * 128];
             tile = new uint[8 * 4];
             tile16 = new uint[16, 16];
 
@@ -61,8 +69,8 @@ namespace Z80.Net.Core
             {
                 for (int x = 0; x <= 216; x += 8)
                 {
-                    int palid = mem.rb((ushort)(0x4400 + i)) & 0x3f;
-                    int offset = mem.rb((ushort)(0x4000 + i)) * 64;
+                    int palid = mem.Rb((ushort)(0x4400 + i)) & 0x3f;
+                    int offset = mem.Rb((ushort)(0x4000 + i)) * 64;
 
                     draw_tile(ref display_pix, x, y, offset, palid);
                     i--;
@@ -77,8 +85,8 @@ namespace Z80.Net.Core
             {
                 for (int x = 0; x <= 216; x += 8)
                 {
-                    int palid = mem.rb((ushort)(0x4400 + i)) & 0x3f;
-                    int offset = mem.rb((ushort)(0x4000 + i)) * 64;
+                    int palid = mem.Rb((ushort)(0x4400 + i)) & 0x3f;
+                    int offset = mem.Rb((ushort)(0x4000 + i)) * 64;
 
                     draw_tile(ref display_pix, x, y, offset, palid);
                     i -= 0x20;
@@ -93,8 +101,8 @@ namespace Z80.Net.Core
             {
                 for (int x = 0; x <= 216; x += 8)
                 {
-                    int palid = mem.rb((ushort)(0x4400 + i)) & 0x3f;
-                    int offset = mem.rb((ushort)(0x4000 + i)) * 64;
+                    int palid = mem.Rb((ushort)(0x4400 + i)) & 0x3f;
+                    int offset = mem.Rb((ushort)(0x4000 + i)) * 64;
 
                     draw_tile(ref display_pix, x, y, offset, palid);
                     i--;
@@ -199,6 +207,66 @@ namespace Z80.Net.Core
             }
         }
 
+        public void draw_tile_viewer(ref int[] pixels, uint[] color_ids, int x, int y, int i, int size)
+        {
+            byte palid = 0x1;
+            int offset = i * 64 * size;
+            uint[] temp = new uint[8 * 4];
+
+            byte[] pl = new byte[4];
+            pl[0] = mem.palettes[palid * 4 + 0];
+            pl[1] = mem.palettes[palid * 4 + 1];
+            pl[2] = mem.palettes[palid * 4 + 2];
+            pl[3] = mem.palettes[palid * 4 + 3];
+
+            for (int j = 0; j < 2; j++)
+            {
+                for (int yy = 0; yy < 4; yy++)
+                {
+                    for (int xx = 0; xx < 8; xx++)
+                    {
+                        uint pix = color_ids[offset++];
+                        byte pal = pl[pix];
+                        byte col = mem.colors[pal];
+
+                        int c = (int)get_palette(col);
+
+                        //if (pix)
+                        //temp[yy * 8 + xx] = c;
+
+                        pixels[(y + (j * 4) + yy) * 128 * size + (x + xx)] = c;
+                    }
+                }
+            }
+        }
+
+        public void draw_sprite_viewer(ref int[] pixels, int x, int y, int i)
+        {
+            byte palid = 0x1;
+            int offset = i * 256;
+            //int base = i * 256;
+
+            byte[] pl = new byte[4];
+            pl[0] = mem.palettes[palid * 4 + 0];
+            pl[1] = mem.palettes[palid * 4 + 1];
+            pl[2] = mem.palettes[palid * 4 + 2];
+            pl[3] = mem.palettes[palid * 4 + 3];
+
+            for (int yy = 0; yy < 16; yy++)
+            {
+                for (int xx = 0; xx < 16; xx++)
+                {
+                    uint pix = sprite_ids[offset++];
+                    byte pal = pl[pix];
+                    byte col = mem.colors[pal];
+
+                    int c = (int)get_palette(col);
+
+                    pixels[(y + yy) * 128 + (x + xx)] = c;
+                }
+            }
+        }
+
         public void decode_graphics()
         {
             int x = 0;
@@ -257,13 +325,6 @@ namespace Z80.Net.Core
                     for (int yy = 3; yy >= 0; yy--)
                     {
                         int pix = ((tid >> h++)) & 2 | (tid >> l++) & 1;
-                        //temp[yy + spr_off[j].y, xx + spr_off[j].x] = pix;
-
-                        //if (pix > 0)
-                        //    tile16[yy + spr_off[j].y, xx + spr_off[j].x] = 0xff0000ff;
-                        //else
-                        //    tile16[yy + spr_off[j].y, xx + spr_off[j].x] = 0;
-
                         int p = basepos + (yy + spr_off[j].y) * 16 + (xx + spr_off[j].x);
                         sprite_ids[p] = (byte)pix;
                     }

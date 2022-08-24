@@ -27,7 +27,7 @@ namespace Z80.Net.Core
         private StreamWriter outfile;
         public bool logging;
 
-        public Tracer(Machine z80)
+        public Tracer(PacMachine z80)
         {
             mem = z80.mem;
         }
@@ -58,7 +58,7 @@ namespace Z80.Net.Core
 
         public List<disasmentry> disasm(ushort pc, bool get_registers)
         {
-            int op = mem.rb(pc);
+            int op = mem.Rb(pc);
 
             int size = 0;
             string name = "";
@@ -87,7 +87,7 @@ namespace Z80.Net.Core
             }
             else if (size == 2)
             {
-                int b1 = mem.rb((ushort)(pc + 1));
+                int b1 = mem.Rb((ushort)(pc + 1));
 
                 if (oper.Contains("X4"))
                 {
@@ -110,8 +110,8 @@ namespace Z80.Net.Core
 
             else if (size == 3)
             {
-                int b1 = mem.rb((ushort)(pc + 1));
-                int b2 = mem.rb((ushort)(pc + 2));
+                int b1 = mem.Rb((ushort)(pc + 1));
+                int b2 = mem.Rb((ushort)(pc + 2));
 
                 if (oper.Contains("X4"))
                 {
@@ -130,9 +130,9 @@ namespace Z80.Net.Core
             }
             else if (size == 4)
             {
-                int b1 = mem.rb((ushort)(pc + 1));
-                int b2 = mem.rb((ushort)(pc + 2));
-                int b3 = mem.rb((ushort)(pc + 3));
+                int b1 = mem.Rb((ushort)(pc + 1));
+                int b2 = mem.Rb((ushort)(pc + 2));
+                int b3 = mem.Rb((ushort)(pc + 3));
 
                 if (oper.Contains("X4"))
                 {
@@ -181,21 +181,21 @@ namespace Z80.Net.Core
 
             if (op == 0xcb || op == 0xdd || op == 0xed || op == 0xfd)
             {
-                int dop = mem.rw((ushort)pc);
+                int dop = mem.Rw((ushort)pc);
 
                 if (dop == 0xcbdd)
                 {
-                    byte b3 = mem.rb((ushort)(pc + 3));
+                    byte b3 = mem.Rb((ushort)(pc + 3));
                     dops = disasm_ddcb[b3];
                 }
                 else if (dop == 0xcbfd)
                 {
-                    int b3 = mem.rw((ushort)(pc + 3));
+                    int b3 = mem.Rw((ushort)(pc + 3));
                     dops = disasm_fdcb[b3];
                 }
                 else
                 {
-                    byte b1 = (byte)mem.rw((ushort)(pc + 1));
+                    byte b1 = (byte)mem.Rw((ushort)(pc + 1));
                     dops = mdisasm[op][b1];
                 }
             }

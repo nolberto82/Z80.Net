@@ -18,13 +18,13 @@ namespace Z80.Net.Core
 
         public bool sound_enabled;
 
-        private Machine z80;
+        private PacMachine z80;
 
         private int accu1, accu2, accu3;
 
         public const int sample_length = 1600;
 
-        public Wsg(Machine z80)
+        public Wsg(PacMachine z80)
         {
             this.z80 = z80;
 
